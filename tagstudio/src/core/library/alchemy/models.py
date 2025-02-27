@@ -18,7 +18,7 @@ from .fields import (
     TextField,
 )
 from .joins import TagParent
-
+from src.core.media_types import MediaCategories
 
 class Namespace(Base):
     __tablename__ = "namespaces"
@@ -234,7 +234,7 @@ class Entry(Base):
         self.folder = folder
         self.id = id
         self.suffix = path.suffix.lstrip(".").lower()
-        if self.suffix in ["jpg", "jpeg", "png", "gif", "webp", "bmp", "tiff", "svg", "ico"]:
+        if self.suffix in MediaCategories.IMAGE_TYPES.extensions:
             try:
                 from PIL import Image
                 with Image.open(Path.joinpath(folder.path, path)) as img:
