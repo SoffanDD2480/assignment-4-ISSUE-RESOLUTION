@@ -117,6 +117,10 @@ class FilterState:
     @classmethod
     def from_tag_name(cls, tag_name: str) -> "FilterState":
         return cls(ast=Constraint(ConstraintType.Tag, tag_name, []))
+    
+    @classmethod
+    def from_aspect_ratio(cls, aspect_ratio: float) -> "FilterState":
+        return cls(ast=Constraint(ConstraintType.ASPECTRATIO, str(aspect_ratio), []))
 
     def with_page_size(self, page_size: int) -> "FilterState":
         return replace(self, page_size=page_size)

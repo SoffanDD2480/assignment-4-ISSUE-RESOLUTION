@@ -1500,7 +1500,7 @@ class QtDriver(DriverMixin, QObject):
 
     def update_completions_list(self, text: str) -> None:
         matches = re.search(
-            r"((?:.* )?)(mediatype|filetype|path|tag|tag_id):(\"?[A-Za-z0-9\ \t]+\"?)?", text
+            r"((?:.* )?)(mediatype|filetype|path|tag|tag_id|aspect_ratio):(\"?[A-Za-z0-9\ \t]+\"?)?", text
         )
 
         completion_list: list[str] = []
@@ -1512,6 +1512,7 @@ class QtDriver(DriverMixin, QObject):
                 "tag:",
                 "tag_id:",
                 "special:untagged",
+                "aspect_ratio:",
             ]
             self.main_window.searchFieldCompletionList.setStringList(completion_list)
 
