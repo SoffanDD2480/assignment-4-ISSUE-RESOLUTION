@@ -234,7 +234,8 @@ class Entry(Base):
         self.folder = folder
         self.id = id
         self.suffix = path.suffix.lstrip(".").lower()
-        if self.suffix in MediaCategories.IMAGE_TYPES.extensions:
+        imgtypes = list(MediaCategories.IMAGE_TYPES.extensions)
+        if f".{self.suffix}" in list(MediaCategories.IMAGE_TYPES.extensions):
             try:
                 from PIL import Image
                 with Image.open(Path.joinpath(folder.path, path)) as img:
