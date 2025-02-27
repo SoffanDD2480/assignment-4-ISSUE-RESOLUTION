@@ -137,8 +137,8 @@ class SQLBoolExpressionBuilder(BaseVisitor[ColumnElement[bool]]):
             if node.value.lower() == "untagged":
                 return ~Entry.id.in_(select(Entry.id).join(TagEntry))
         elif node.type == ConstraintType.ASPECTRATIO:
-            if re.search(r'(\d+)~(\d+)', node.value):
-                aspect_ratio = node.value.split("~")
+            if re.search(r'(\d+)-(\d+)', node.value):
+                aspect_ratio = node.value.split("-")
                 return self.__entry_between_range_aspect_ratio(float(aspect_ratio[0]), float(aspect_ratio[1]))
             elif node.value.startswith(">"):
                 return self.__entry_more_than_aspect_ratio(float(node.value[1:]))
