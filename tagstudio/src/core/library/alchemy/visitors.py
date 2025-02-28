@@ -179,7 +179,7 @@ class SQLBoolExpressionBuilder(BaseVisitor[ColumnElement[bool]]):
         return (
             select(1)
             .correlate(Entry)
-            .where(Entry.aspect_ratio >= aspect_ratio)
+            .where(Entry.aspect_ratio > aspect_ratio)
             .exists()
         )
     
@@ -188,7 +188,7 @@ class SQLBoolExpressionBuilder(BaseVisitor[ColumnElement[bool]]):
         return (
             select(1)
             .correlate(Entry)
-            .where(Entry.aspect_ratio <= aspect_ratio)
+            .where(Entry.aspect_ratio < aspect_ratio)
             .exists()
         )
     def __entry_between_range_aspect_ratio(self, aspect_ratio1: float, aspect_ratio2: float) -> ColumnElement[bool]:
