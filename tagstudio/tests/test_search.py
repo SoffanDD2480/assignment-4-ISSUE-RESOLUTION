@@ -32,6 +32,10 @@ def verify_count(lib: Library, query: str, count: int):
         ("green", 5),
         ("orange", 5),
         ("tag:orange", 5),
+        ("aspect_ratio:1", 26),
+        ("aspect_ratio:<0.9", 4),
+        ("aspect_ratio:>1.2", 1),
+        ("aspect_ratio:0.5-0.9", 4),
     ],
 )
 def test_single_constraint(search_library: Library, query: str, count: int):
