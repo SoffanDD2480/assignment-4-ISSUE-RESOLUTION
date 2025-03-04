@@ -229,7 +229,6 @@ class Entry(Base):
         date_created: dt | None = None,
         date_modified: dt | None = None,
         date_added: dt | None = None,
-        aspect_ratio: float | None = None,
     ) -> None:
         self.path = path
         self.folder = folder
