@@ -7,6 +7,7 @@ from pathlib import Path
 
 from sqlalchemy import JSON, ForeignKey, ForeignKeyConstraint, Integer, event
 from sqlalchemy.orm import Mapped, mapped_column, relationship
+from src.core.media_types import MediaCategories
 
 from ...constants import TAG_ARCHIVED, TAG_FAVORITE
 from .db import Base, PathType
@@ -18,7 +19,7 @@ from .fields import (
     TextField,
 )
 from .joins import TagParent
-from src.core.media_types import MediaCategories
+
 
 class Namespace(Base):
     __tablename__ = "namespaces"
@@ -234,7 +235,6 @@ class Entry(Base):
         self.folder = folder
         self.id = id
         self.suffix = path.suffix.lstrip(".").lower()
-        imgtypes = list(MediaCategories.IMAGE_TYPES.extensions)
         if f".{self.suffix}" in list(MediaCategories.IMAGE_TYPES.extensions):
             try:
                 from PIL import Image
