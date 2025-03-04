@@ -10,6 +10,7 @@ class ConstraintType(Enum):
     FileType = 3
     Path = 4
     Special = 5
+    ASPECTRATIO = 6
 
     @staticmethod
     def from_string(text: str) -> "ConstraintType":
@@ -20,6 +21,7 @@ class ConstraintType(Enum):
             "filetype": ConstraintType.FileType,
             "path": ConstraintType.Path,
             "special": ConstraintType.Special,
+            "aspect_ratio": ConstraintType.ASPECTRATIO,
         }.get(text.lower(), None)
 
 
