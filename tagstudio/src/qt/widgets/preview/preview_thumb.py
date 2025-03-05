@@ -5,6 +5,7 @@
 import io
 import time
 import typing
+from contextlib import suppress
 from pathlib import Path
 from warnings import catch_warnings
 
@@ -365,7 +366,10 @@ class PreviewThumb(QWidget):
             )
 
         with catch_warnings(record=True):
-            self.preview_img.clicked.disconnect()
+            if getattr(self.preview_img, "is_connected", False):
+                self.preview_img.clicked.disconnect()
+                self.preview_img.is_connected = False
+
         self.preview_img.clicked.connect(lambda checked=False, path=filepath: open_file(path))
         self.preview_img.is_connected = True
 
@@ -373,12 +377,18 @@ class PreviewThumb(QWidget):
         self.preview_img.setCursor(Qt.CursorShape.PointingHandCursor)
 
         self.opener = FileOpenerHelper(filepath)
+        with catch_warnings(record=True), suppress(Exception):
+            self.open_file_action.triggered.disconnect()
         self.open_file_action.triggered.connect(self.opener.open_file)
-        self.open_explorer_action.triggered.connect(self.opener.open_explorer)
 
-        with catch_warnings(record=True):
+        with catch_warnings(record=True), suppress(Exception):
+            self.open_explorer_action.triggered.disconnect()
+        self.open_explorer_action.triggered.connect(
+            lambda checked=False: self.opener.open_explorer()
+        )
+
+        with catch_warnings(record=True), suppress(Exception):
             self.delete_action.triggered.disconnect()
-
         self.delete_action.setText(
             Translations.translate_formatted("trash.context.singular", trash_term=trash_term())
         )
