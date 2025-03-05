@@ -137,10 +137,11 @@ class SQLBoolExpressionBuilder(BaseVisitor[ColumnElement[bool]]):
             if node.value.lower() == "untagged":
                 return ~Entry.id.in_(select(Entry.id).join(TagEntry))
         elif node.type == ConstraintType.ASPECTRATIO:
-            if re.search(r'(\d+)-(\d+)', node.value):
+            if re.search(r"(\d+)-(\d+)", node.value):
                 aspect_ratio = node.value.split("-")
-                return self.__entry_between_range_aspect_ratio(float(aspect_ratio[0]),
-                                                               float(aspect_ratio[1]))
+                return self.__entry_between_range_aspect_ratio(
+                    float(aspect_ratio[0]), float(aspect_ratio[1])
+                )
             elif node.value.startswith(">"):
                 return self.__entry_more_than_aspect_ratio(float(node.value[1:]))
             elif node.value.startswith("<"):
@@ -168,32 +169,19 @@ class SQLBoolExpressionBuilder(BaseVisitor[ColumnElement[bool]]):
 
     def __entry_matches_aspect_ratio(self, aspect_ratio: float) -> ColumnElement[bool]:
         """Returns a boolean expression that is true if the entry has at least one of the supplied tags."""  # noqa: E501
-        return (
-            select(1)
-            .correlate(Entry)
-            .where(Entry.aspect_ratio == aspect_ratio)
-            .exists()
-    )
-        
+        return select(1).correlate(Entry).where(Entry.aspect_ratio == aspect_ratio).exists()
+
     def __entry_more_than_aspect_ratio(self, aspect_ratio: float) -> ColumnElement[bool]:
         """Returns a boolean expression that is true if the entry has at least one of the supplied tags."""  # noqa: E501
-        return (
-            select(1)
-            .correlate(Entry)
-            .where(Entry.aspect_ratio > aspect_ratio)
-            .exists()
-        )
-    
+        return select(1).correlate(Entry).where(Entry.aspect_ratio > aspect_ratio).exists()
+
     def __entry_less_than_aspect_ratio(self, aspect_ratio: float) -> ColumnElement[bool]:
         """Returns a boolean expression that is true if the entry has at least one of the supplied tags."""  # noqa: E501
-        return (
-            select(1)
-            .correlate(Entry)
-            .where(Entry.aspect_ratio < aspect_ratio)
-            .exists()
-        )
-    def __entry_between_range_aspect_ratio(self, aspect_ratio1: float, aspect_ratio2: float) \
-            -> ColumnElement[bool]:
+        return select(1).correlate(Entry).where(Entry.aspect_ratio < aspect_ratio).exists()
+
+    def __entry_between_range_aspect_ratio(
+        self, aspect_ratio1: float, aspect_ratio2: float
+    ) -> ColumnElement[bool]:
         """Returns a boolean expression that is true if the entry has at least one of the supplied tags."""  # noqa: E501
         return (
             select(1)

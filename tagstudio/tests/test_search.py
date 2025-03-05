@@ -120,7 +120,7 @@ def test_not(search_library: Library, query: str, count: int):
         ("((circle) and (not square))", 6),
         ("(not ((square) OR (green)))", 17),
         ("filetype:png and (tag:square or green)", 12),
-        ("not blue and (aspect_ratio:<1)", 1)
+        ("not blue and (aspect_ratio:<1)", 1),
     ],
 )
 def test_parentheses(search_library: Library, query: str, count: int):

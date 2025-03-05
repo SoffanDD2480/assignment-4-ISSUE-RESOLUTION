@@ -237,6 +237,7 @@ class Entry(Base):
         if f".{self.suffix}" in list(MediaCategories.IMAGE_TYPES.extensions):
             try:
                 from PIL import Image
+
                 with Image.open(Path.joinpath(folder.path, path)) as img:
                     self.aspect_ratio = img.width / img.height
             except Exception:
