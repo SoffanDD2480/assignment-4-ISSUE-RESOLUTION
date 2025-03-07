@@ -32,6 +32,11 @@ def verify_count(lib: Library, query: str, count: int):
         ("green", 5),
         ("orange", 5),
         ("tag:orange", 5),
+        ("aspect_ratio:1", 26),
+        ("aspect_ratio:<1", 4),
+        ("aspect_ratio:>1.2", 1),
+        ("aspect_ratio:0.5-0.9", 4),
+        ("aspect_ratio:20000", 0),
     ],
 )
 def test_single_constraint(search_library: Library, query: str, count: int):
@@ -51,6 +56,8 @@ def test_single_constraint(search_library: Library, query: str, count: int):
         ("square and filetype:jpg", 2),
         ("orange filetype:png", 5),
         ("green path:*inherit*", 4),
+        ("blue and aspect_ratio:<1", 3),
+        ("filetype:jpg and aspect_ratio:>1.3", 1),
     ],
 )
 def test_and(search_library: Library, query: str, count: int):
@@ -70,6 +77,7 @@ def test_and(search_library: Library, query: str, count: int):
         ("filetype:jpg or tag:orange", 11),
         ("red or filetype:png", 28),
         ("filetype:jpg or path:*comp*", 11),
+        ("green or aspect_ratio:<1", 9),
     ],
 )
 def test_or(search_library: Library, query: str, count: int):
@@ -95,6 +103,8 @@ def test_or(search_library: Library, query: str, count: int):
         ("not circle and square", 6),
         ("special:untagged or not filetype:jpg", 25),
         ("not square or green", 22),
+        ("not blue and aspect_ratio:<1", 1),
+        ("not aspect_ratio:<1.1", 1),
     ],
 )
 def test_not(search_library: Library, query: str, count: int):
@@ -110,6 +120,7 @@ def test_not(search_library: Library, query: str, count: int):
         ("((circle) and (not square))", 6),
         ("(not ((square) OR (green)))", 17),
         ("filetype:png and (tag:square or green)", 12),
+        ("not blue and (aspect_ratio:<1)", 1),
     ],
 )
 def test_parentheses(search_library: Library, query: str, count: int):

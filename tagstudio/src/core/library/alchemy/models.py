@@ -7,6 +7,7 @@ from pathlib import Path
 
 from sqlalchemy import JSON, ForeignKey, ForeignKeyConstraint, Integer, event
 from sqlalchemy.orm import Mapped, mapped_column, relationship
+from src.core.media_types import MediaCategories
 
 from ...constants import TAG_ARCHIVED, TAG_FAVORITE
 from .db import Base, PathType
@@ -191,7 +192,7 @@ class Entry(Base):
     date_created: Mapped[dt | None]
     date_modified: Mapped[dt | None]
     date_added: Mapped[dt | None]
-
+    aspect_ratio: Mapped[float | None]
     tags: Mapped[set[Tag]] = relationship(secondary="tag_entries")
 
     text_fields: Mapped[list[TextField]] = relationship(
@@ -233,7 +234,14 @@ class Entry(Base):
         self.folder = folder
         self.id = id
         self.suffix = path.suffix.lstrip(".").lower()
+        if f".{self.suffix}" in list(MediaCategories.IMAGE_TYPES.extensions):
+            try:
+                from PIL import Image
 
+                with Image.open(Path.joinpath(folder.path, path)) as img:
+                    self.aspect_ratio = img.width / img.height
+            except Exception:
+                self.aspect_ratio = None
         # The date the file associated with this entry was created.
         # st_birthtime on Windows and Mac, st_ctime on Linux.
         self.date_created = date_created
