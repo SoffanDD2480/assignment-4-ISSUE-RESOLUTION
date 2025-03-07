@@ -211,11 +211,14 @@ class FileAttributes(QWidget):
 
             if duration_text:
                 stats_label_text = add_newline(stats_label_text)
-                dur_str = str(timedelta(seconds=float(duration_text)))[:-7]
-                if dur_str.startswith("0:"):
-                    dur_str = dur_str[2:]
-                if dur_str.startswith("0"):
-                    dur_str = dur_str[1:]
+                try:
+                    dur_str = str(timedelta(seconds=float(duration_text)))[:-7]
+                    if dur_str.startswith("0:"):
+                        dur_str = dur_str[2:]
+                    if dur_str.startswith("0"):
+                        dur_str = dur_str[1:]
+                except OverflowError:
+                    dur_str = "-:--"
                 stats_label_text += f"{dur_str}"
 
             if font_family:
@@ -228,7 +231,7 @@ class FileAttributes(QWidget):
         """Format attributes for multiple selected items."""
         self.layout().setSpacing(0)
         self.file_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        Translations.translate_qobject(self.file_label, "preview.multiple_selection", count=count)
+        self.file_label.setText(Translations["preview.multiple_selection"].format(count=count))
         self.file_label.setCursor(Qt.CursorShape.ArrowCursor)
         self.file_label.set_file_path("")
         self.dimensions_label.setText("")

@@ -367,14 +367,11 @@ class Library:
                 if db_result:
                     db_version = db_result.value  # type: ignore
 
-                if db_version < 6:  # NOTE: DB_VERSION 6 is the first supported SQL DB version.
-                    mismatch_text = Translations.translate_formatted(
-                        "status.library_version_mismatch"
-                    )
-                    found_text = Translations.translate_formatted("status.library_version_found")
-                    expected_text = Translations.translate_formatted(
-                        "status.library_version_expected"
-                    )
+                # NOTE: DB_VERSION 6 is the first supported SQL DB version.
+                if db_version < 6 or db_version > LibraryPrefs.DB_VERSION.default:
+                    mismatch_text = Translations["status.library_version_mismatch"]
+                    found_text = Translations["status.library_version_found"]
+                    expected_text = Translations["status.library_version_expected"]
                     return LibraryStatus(
                         success=False,
                         message=(
@@ -1190,7 +1187,6 @@ class Library:
                     f"{RESERVED_NAMESPACE_PREFIX}",
                     namespace=namespace,
                 )
-            logger.error("Should not see me")
 
             namespace_obj = Namespace(
                 namespace=slug,
